@@ -36,7 +36,7 @@ public class Interceptor extends FileWorker {
 
     private static int getRandomIndex(String byteValue) {
         var random = new Random();
-        int bound = byteValue.length();                //8
+        int bound = byteValue.length();                 //8
 
         return random.nextInt(bound);
     }

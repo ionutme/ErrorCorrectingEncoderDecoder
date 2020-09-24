@@ -11,13 +11,10 @@ public class Main {
     private static final File decodedFile = new File("decoded.txt");
 
     public static void main(String[] args) {
-
         System.out.print("Write a mode: ");
 
         var scanner = new Scanner(System.in);
         String mode = scanner.next().toUpperCase();
-
-        FileWorker fileWorker;
 
         switch (mode) {
             case "ENCODE":
@@ -39,20 +36,18 @@ public class Main {
         }
     }
 
-    private static void decode() {
-        FileWorker fileWorker;
-        fileWorker = new Decoder();
-        fileWorker.process(receivedFile, decodedFile);
-    }
-
-    private static void send() {
-        FileWorker fileWorker;
-        fileWorker = new Interceptor();
-        fileWorker.process(encodedFile, receivedFile);
-    }
-
     private static void encode() {
         FileWorker fileWorker = new Encoder();
         fileWorker.process(inputFile, encodedFile);
+    }
+
+    private static void send() {
+        FileWorker fileWorker = new Interceptor();
+        fileWorker.process(encodedFile, receivedFile);
+    }
+
+    private static void decode() {
+        FileWorker fileWorker = new Decoder();
+        fileWorker.process(receivedFile, decodedFile);
     }
 }

@@ -2,6 +2,7 @@ package correcter;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EncodingDeque extends ArrayDeque<Character>{
 
@@ -11,7 +12,7 @@ public class EncodingDeque extends ArrayDeque<Character>{
         }
     }
 
-    public ArrayList<char[]> getChunks(int chunk) {
+    public ArrayList<char[]> toChunks(int chunk) {
         int count = this.size() / chunk;
 
         var bitsChunks = new ArrayList<char[]>(count);
@@ -27,36 +28,36 @@ public class EncodingDeque extends ArrayDeque<Character>{
         return bitsChunks;
     }
 
-    public ArrayList<char[]> getChunks(int chunk, boolean addTrailingZeros) {
-        int count = this.size() / chunk;
-
-        var bitsChunks = new ArrayList<char[]>();
-        for (int i = 0; i < count; i++) {
-            var bitsGroup = new char[chunk];
-            for (int j = 0; j < chunk; j++) {
-                bitsGroup[j] = this.pop();
-            }
-
-            bitsChunks.add(bitsGroup);
-        }
-
+    public ArrayList<char[]> toChunksWithTrailingZeros(int chunk) {
+        ArrayList<char[]> bitsChunks = this.toChunks(chunk);
 
         int rest = this.size() % chunk;
         if (rest > 0) {
-
-            var lsatBitsGroup = new char[chunk];
-
-            for (int i = 0; i <= chunk - rest; i++) {
-                lsatBitsGroup[i] = this.pop();
-            }
-
-            for (int i = chunk - rest + 1; i < chunk; i++) {
-                lsatBitsGroup[i] = '0';
-            }
-
-            bitsChunks.add(lsatBitsGroup);
+            bitsChunks.add(getRestChunkWithTrailingZeros(chunk, rest));
         }
 
         return bitsChunks;
+    }
+
+    private char[] getRestChunkWithTrailingZeros(int chunk, int rest) {
+        char[] lastBitsGroup = getChunkWithZeros(chunk);
+
+        int endMsgIndex = chunk - rest + 1;
+        setMessageBits(endMsgIndex, lastBitsGroup);
+
+        return lastBitsGroup;
+    }
+
+    private char[] getChunkWithZeros(int chunk) {
+        var lastBitsGroup = new char[chunk];
+        Arrays.fill(lastBitsGroup, '0');
+
+        return lastBitsGroup;
+    }
+
+    private void setMessageBits(int toIndex, char[] lsatBitsGroup) {
+        for (int i = 0; i < toIndex; i++) {
+            lsatBitsGroup[i] = this.pop();
+        }
     }
 }
