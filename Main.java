@@ -6,9 +6,9 @@ import java.util.Scanner;
 public class Main {
 
     private static final File inputFile = new File("send.txt");
-    private static final File encodedFile = new File("encoded.txt");
-    private static final File receivedFile = new File("received.txt");
-    private static final File decodedFile = new File("decoded.txt");
+    private static final File encodedFile = new File(".\\..\\..\\encoded.txt");
+    private static final File receivedFile = new File(".\\..\\..\\received.txt");
+    private static final File decodedFile = new File(".\\..\\..\\decoded.txt");
 
     public static void main(String[] args) {
         System.out.print("Write a mode: ");

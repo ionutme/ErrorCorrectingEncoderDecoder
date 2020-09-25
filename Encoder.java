@@ -30,8 +30,9 @@ public class Encoder extends FileWorker {
     }
 
     private int encode(char[] bits) {
-        String hByte = new HammingByte(bits).toString();
+        var hByte = new HammingByte();
+        var encodedByte = String.valueOf(hByte.encode(bits));
 
-        return toDecimal(hByte);
+        return toDecimal(encodedByte);
     }
 }

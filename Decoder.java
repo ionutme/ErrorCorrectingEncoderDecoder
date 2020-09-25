@@ -17,9 +17,9 @@ public class Decoder extends FileWorker {
         while (input != -1) {
 
             char[] bits = getBits(input);
-            var hByte = new HammingByte();
+            var hByte = new HammingByte(bits);
 
-            decodedMessage.add(hByte.decode(bits));
+            decodedMessage.add(hByte.decode());
 
             input = fileInputStream.read();
         }
