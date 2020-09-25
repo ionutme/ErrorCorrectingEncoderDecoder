@@ -17,9 +17,9 @@ public class Decoder extends FileWorker {
         while (input != -1) {
 
             char[] bits = getBits(input);
-            char[] correctBits = ByteCorrector.correctError(bits);
+            var hByte = new HammingByte();
 
-            decodedMessage.add(getMessageBits(correctBits));
+            decodedMessage.add(hByte.decode(bits));
 
             input = fileInputStream.read();
         }
@@ -28,19 +28,5 @@ public class Decoder extends FileWorker {
         for (char[] bits : chunks) {
             fileOutputStream.write(toByte(bits));
         }
-
-        if (!decodedMessage.isEmpty()) {
-            // ignore
-        }
-    }
-
-    private char[] getMessageBits(char[] bits) {
-        int length = (bits.length - PARITY_LENGTH) / STEP;
-        var messageBits = new char[length];
-        for (int i = 0, j = 0; i < length; i++, j += STEP) {
-            messageBits[i] = bits[j];
-        }
-
-        return messageBits;
     }
 }
