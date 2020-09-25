@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class EncodingDeque extends ArrayDeque<Character>{
+public class Deque extends ArrayDeque<Character>{
 
     public void add(char[] chars) {
         for (char c : chars) {
@@ -12,7 +12,7 @@ public class EncodingDeque extends ArrayDeque<Character>{
         }
     }
 
-    public ArrayList<char[]> toChunks(int chunk) {
+    public ArrayList<char[]> getChunks(int chunk) {
         int count = this.size() / chunk;
 
         var bitsChunks = new ArrayList<char[]>(count);
@@ -28,8 +28,14 @@ public class EncodingDeque extends ArrayDeque<Character>{
         return bitsChunks;
     }
 
-    public ArrayList<char[]> toChunksWithTrailingZeros(int chunk) {
-        ArrayList<char[]> bitsChunks = this.toChunks(chunk);
+    public char[] getRestChunkWithTrailingZeros(int chunk) {
+        var restChunks = this.getChunksWithTrailingZeros(chunk);
+
+        return restChunks.get(restChunks.size() - 1);
+    }
+
+    private ArrayList<char[]> getChunksWithTrailingZeros(int chunk) {
+        var bitsChunks = this.getChunks(chunk);
 
         int rest = this.size() % chunk;
         if (rest > 0) {

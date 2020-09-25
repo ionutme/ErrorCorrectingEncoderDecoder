@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static correcter.BinaryUtil.*;
+import static correcter.Constants.*;
 
 public class Decoder extends FileWorker {
     @Override
     void transform(FileInputStream fileInputStream, FileOutputStream fileOutputStream) throws IOException {
-        var decodedText = new EncodingDeque();
+        var decodedMessage = new Deque();
 
         int input = fileInputStream.read();
         while (input != -1) {
@@ -18,22 +19,28 @@ public class Decoder extends FileWorker {
             char[] bits = getBits(input);
             char[] correctBits = ByteCorrector.correctError(bits);
 
-            decodedText.add(getMessage(correctBits));
+            decodedMessage.add(getMessageBits(correctBits));
 
             input = fileInputStream.read();
         }
 
-        ArrayList<char[]> chunks = decodedText.toChunks(8);
+        ArrayList<char[]> chunks = decodedMessage.getChunks(DECODING_CHUNK);
         for (char[] bits : chunks) {
             fileOutputStream.write(toByte(bits));
         }
 
-        if (!decodedText.isEmpty()) {
+        if (!decodedMessage.isEmpty()) {
             // ignore
         }
     }
 
-    private char[] getMessage(char[] bits) {
-        return new char[]{bits[0], bits[2], bits[4]};
+    private char[] getMessageBits(char[] bits) {
+        int length = (bits.length - PARITY_LENGTH) / STEP;
+        var messageBits = new char[length];
+        for (int i = 0, j = 0; i < length; i++, j += STEP) {
+            messageBits[i] = bits[j];
+        }
+
+        return messageBits;
     }
 }

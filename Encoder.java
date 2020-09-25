@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static correcter.BinaryUtil.*;
-import static correcter.EncodingDecodingUtil.*;
+import static correcter.Constants.*;
 
 public class Encoder extends FileWorker {
-    private final EncodingDeque deque;
+    private final Deque deque;
 
     public Encoder() {
-        deque = new EncodingDeque();
+        deque = new Deque();
     }
 
     @Override
@@ -21,7 +21,7 @@ public class Encoder extends FileWorker {
         while (input != -1) {
             this.deque.add(getBits(input));
 
-            ArrayList<char[]> chunks = this.deque.toChunks(ENCODING_CHUNK);
+            ArrayList<char[]> chunks = this.deque.getChunks(ENCODING_CHUNK);
             for (char[] bits : chunks){
                 fileOutputStream.write(encode(bits));
             }
@@ -30,7 +30,7 @@ public class Encoder extends FileWorker {
         }
 
         if (!this.deque.isEmpty()) {
-            char[] restBits = this.deque.toChunksWithTrailingZeros(ENCODING_CHUNK).get(0);
+            char[] restBits = this.deque.getRestChunkWithTrailingZeros(ENCODING_CHUNK);
 
             fileOutputStream.write(encode(restBits));
         }

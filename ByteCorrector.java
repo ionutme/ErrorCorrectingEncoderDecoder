@@ -3,11 +3,9 @@ package correcter;
 import java.util.Arrays;
 
 import static correcter.BinaryUtil.*;
+import static correcter.Constants.*;
 
 public class ByteCorrector {
-
-    public static final int STEP = 2;
-    public static final int PARITY_LENGTH = 2;
 
     public static char[] correctError(char[] bits) {
         int errorIndex = getErrorIndex(bits);
